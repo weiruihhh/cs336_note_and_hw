@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 
+"""在讲义中，线性层在最后一步将d_model维度映射到vocab_size维度"""
 class LinearModule(nn.Module):
     def __init__(self, in_features: int, out_features: int, device: torch.device | None = None, dtype: torch.dtype | None = None):
         super().__init__()
@@ -19,7 +20,7 @@ class LinearModule(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return x @ self.W.T
     
-
+"""在讲义中，embedding层在第一步将token_ids映射到d_model维度"""
 class EmbeddingModule(nn.Module):
     def __init__(self, num_embeddings: int, embedding_dim: int, device: torch.device | None = None, dtype: torch.dtype | None = None):
         super().__init__()

@@ -2,6 +2,18 @@ import torch
 import torch.nn as nn
 
 class ScaledDotProductAttention(nn.Module):
+    """
+    ScaledDotProductAttention 是缩放点积注意力，它通过将输入的稠密向量与输入的稠密向量进行点积来得到输出。
+    公式是：
+    out = softmax(QK^T / sqrt(d_k))V
+    Args:
+        Q: (batch_size, seq_len, d_k) 查询向量
+        K: (batch_size, seq_len, d_k) 键向量
+        V: (batch_size, seq_len, d_k) 值向量
+        mask: (batch_size, seq_len, seq_len) 掩码
+    output:
+        out: (batch_size, seq_len, d_k) 输出的稠密向量
+    """
     def __init__(self):
         super().__init__()
 

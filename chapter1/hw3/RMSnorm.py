@@ -1,8 +1,23 @@
 import torch
 from torch import nn
-import torch.nn.functional as F
 
 class RMSNorm(nn.Module):
+    """
+    RMSNorm 是归一化技术，它通过将输入除以输入的平方根的平均值来稳定训练。
+    公式是：
+    x_norm = x / (x.pow(2).mean(dim=-1, keepdim=True) + eps).sqrt()
+    x_norm = x_norm * weight
+    
+    Args:
+        d_model (int): 经过embedding层之后，每个token的维度
+        eps (float): 一个很小的常数，用于避免除以零
+        device (torch.device): 设备
+        dtype (torch.dtype): 数据类型
+    input:
+        x: (batch_size, seq_len, d_model) 输入的稠密向量
+    output:
+        x_norm: (batch_size, seq_len, d_model) 归一化后的稠密向量
+    """
     def __init__(self, d_model: int, eps: float = 1e-5, device=None, dtype=None):
         super().__init__()
         self.eps = eps
