@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
-from causal_multi_head_attention_with_rope import CausalMultiHeadAttentionWithRoPE
-from RMSnorm import RMSNorm
-from SwiGLU import SwiGLU
-from rope import RoPE
+from hw3.causal_multi_head_attention_with_rope import CausalMultiHeadAttentionWithRoPE
+from hw3.RMSnorm import RMSNorm
+from hw3.SwiGLU import SwiGLU
+from hw3.rope import RoPE
 
 class TransformerBlock(nn.Module):
     """
