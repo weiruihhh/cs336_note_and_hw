@@ -39,6 +39,8 @@
 
 欢迎加入QQ群一起讨论：1039207477
 
+![CS336 QQ Group](figures/QQ群.jpg)
+
 ## 📄 许可证
 
 本项目采用 MIT 许可证 - 详情请见 `LICENSE` 文件。
