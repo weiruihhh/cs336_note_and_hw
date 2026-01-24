@@ -1,0 +1,43 @@
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# 大型数据文件
+*.txt
+!README.txt
+*.pkl
+*.bin
+*.safetensors
+
+# 模型文件
+chapter5/models/
+chapter1/data/
+chapter1/hw7/checkpoints/
+chapter1/hw7/*_train.pkl
+chapter1/hw7/*_valid.pkl
+
+# Python缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# Git LFS 缓存
+.git/lfs/
+
+# 日志文件
+*.log
