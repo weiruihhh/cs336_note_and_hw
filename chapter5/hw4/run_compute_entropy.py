@@ -1,5 +1,5 @@
 import torch
-from torch.nn.functional as F
+import torch.nn.functional as F
 
 def run_compute_entropy(logits: torch.Tensor) -> torch.Tensor:
     probs = F.softmax(logits, dim=-1)
