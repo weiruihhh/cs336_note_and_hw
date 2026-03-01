@@ -1,3 +1,6 @@
+import torch
+
+
 def run_masked_mean(tensor: torch.Tensor, mask: torch.Tensor, dim: int | None = None) -> torch.Tensor:
     """Compute the mean of the tensor along a dimension,
     considering only the elements with mask value 1.

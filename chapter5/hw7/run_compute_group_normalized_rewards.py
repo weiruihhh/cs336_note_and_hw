@@ -1,3 +1,5 @@
+from typing import Callable
+
 import torch
 def run_compute_group_normalized_rewards(
     reward_fn: Callable,
@@ -7,6 +9,9 @@ def run_compute_group_normalized_rewards(
     advantage_eps: float,
     normalize_by_std: bool,
 ) -> tuple[torch.Tensor, dict[str, float]]:
+    """
+    计算每个 rollout 的 reward，并按组进行归一化。每 group_size 个连续的 rollouts 属于同一组，归一化时会使用该组内的 reward 进行中心化（减均值）和可选的标准差归一化。
+    """
     # 1. raw rewards，用 zip 可以省去手写索引
     raw_rewards = torch.tensor([
         reward_fn(r, g)["reward"] for r, g in zip(rollout_responses, repeated_ground_truths)
