@@ -6,6 +6,7 @@ import importlib
 import inspect
 import json
 import random
+import re
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -25,7 +26,12 @@ HW4_ROOT = PROJECT_ROOT / "hw4"
 if str(HW4_ROOT) not in sys.path:
     sys.path.insert(0, str(HW4_ROOT))
 
-from cs336_alignment.drgrpo_grader import r1_zero_reward_fn
+from cs336_alignment.drgrpo_grader import (
+    extract_answer,
+    grade,
+    question_only_reward_fn,
+    r1_zero_reward_fn,
+)
 from run_get_response_log_probs import run_get_response_log_probs
 # hw4/run_tokenize_prompt_and_output.py uses this name in annotations.
 builtins.PreTrainedTokenizerBase = PreTrainedTokenizerBase
@@ -34,7 +40,8 @@ from run_compute_group_normalized_rewards import run_compute_group_normalized_re
 from run_grpo_microbatch_train_step import run_grpo_microbatch_train_step
 from run_masked_mean import run_masked_mean
 
-PROMPT_TEMPLATE = (
+#因为严格要求格式的话正确率会一直低到0，导致奖励稀疏，训练非常困难，所以我设计了一个 answer_focused 的奖励模式，放宽格式要求，优先按答案正确与否给奖励。这个模式下的 prompt 模板和停止字符串也做了相应调整，更加宽松地捕捉模型输出中的答案信息。
+STRICT_PROMPT_TEMPLATE = (
     "A conversation between User and Assistant. The User asks a question, and the Assistant "
     "solves it. The Assistant first thinks about the reasoning process in the mind and then "
     "provides the User with the answer. The reasoning process is enclosed within <think> </think> "
@@ -43,6 +50,14 @@ PROMPT_TEMPLATE = (
     "User: {question}\n"
     "Assistant: <think>"
 )
+ANSWER_FOCUSED_PROMPT_TEMPLATE = (
+    "You are a math assistant. Solve the user's question.\n"
+    "Give the final answer in LaTeX as \\\\boxed{{...}} on the last line.\n"
+    "User: {question}\n"
+    "Assistant:"
+)
+STRICT_STOP_STRINGS = ["</answer>"] #严格在</answer>处停止
+ANSWER_FOCUSED_STOP_STRINGS = ["\nUser:", "</answer>"] #除了 </answer>，还会在出现下一轮对话前缀 \nUser: 时停止。这样可以防止模型继续自导自演”轮对话，尽量把输出截在当前答案处。
 
 
 @dataclass
@@ -56,6 +71,7 @@ class GRPOConfig:
     seed: int = 42
     n_grpo_steps: int = 200
     learning_rate: float = 1e-5
+    optimizer_eps: float = 1e-4
     advantage_eps: float = 1e-6
     rollout_batch_size: int = 256
     group_size: int = 8
@@ -67,6 +83,8 @@ class GRPOConfig:
     gradient_accumulation_steps: int = 128
     max_grad_norm: float = 1.0
     loss_type: Literal["no_baseline", "reinforce_with_baseline", "grpo_clip"] = "reinforce_with_baseline"
+    # strict(既要求答案正确性又要求格式) 或 answer_focused(放宽格式，优先答案正确性)。
+    reward_mode: Literal["strict", "answer_focused"] = "answer_focused"
     cliprange: float = 0.2
     is_std_normalization: bool = True
     gpu_memory_utilization: float = 0.85
@@ -80,6 +98,142 @@ class GRPOConfig:
 def load_jsonl(path: str) -> list[dict[str, Any]]:
     with open(path, "r", encoding="utf-8") as f:
         return [json.loads(line) for line in f]
+
+
+def _ground_truth_candidates(ground_truth: Any) -> list[str]:
+    """
+    将ground_truth 转化成一个字符串列表，作为答案匹配的候选。这样可以兼容MATH里是数字、字符串或者列表等不同格式的情况。
+    """
+    if isinstance(ground_truth, (int, float)):
+        return [str(ground_truth)]
+    if isinstance(ground_truth, str):
+        return [ground_truth]
+    if isinstance(ground_truth, list):
+        return [str(x) for x in ground_truth]
+    return [str(ground_truth)]
+
+
+def _extract_answer_candidates(response: str) -> list[str]:
+    """
+    从模型的完整回复中尽可能地提取出一些“可能的答案片段”，作为奖励函数匹配正确答案的候选。
+    """
+    text = response.strip()
+    candidates: list[str] = []
+
+    if "<answer>" in text and "</answer>" in text:
+        segment = text.split("<answer>")[-1].split("</answer>")[0].strip()
+        if segment:
+            candidates.append(segment)
+
+    if "\\boxed" in text:
+        try:
+            boxed = extract_answer(text)
+        except Exception:
+            boxed = None
+        if boxed:
+            candidates.append(boxed.strip())
+
+    if "</think>" in text:
+        tail = text.split("</think>")[-1].strip()
+        if tail:
+            candidates.append(tail)
+
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    if lines:
+        last_line = re.sub(r"^(final answer|answer)\s*[:：]\s*", "", lines[-1], flags=re.IGNORECASE).strip()
+        if last_line:
+            candidates.append(last_line)
+
+        # 非 boxed 输出时，提取“最后一个简单数学片段”做答案候选。
+        regexes = [
+            r"(\\frac\{[^{}]+\}\{[^{}]+\})\s*$",
+            r"(-?\d+(?:\.\d+)?(?:/\d+)?)\s*$",
+            r"([A-Za-z]\s*=\s*[-+]?\d+(?:\.\d+)?)\s*$",
+        ]
+        for pattern in regexes:
+            m = re.search(pattern, last_line)
+            if m:
+                candidates.append(m.group(1).strip())
+
+    # 从全文中抓取“最后出现的若干数学片段”，提高答案匹配召回率。
+    global_patterns = [
+        r"\\frac\{[^{}]+\}\{[^{}]+\}",
+        r"-?\d+(?:\.\d+)?(?:/\d+)?",
+    ]
+    for pattern in global_patterns:
+        matches = re.findall(pattern, text)
+        if matches:
+            for item in matches[-3:]:
+                candidates.append(item.strip())
+
+    if text:
+        candidates.append(text)
+
+    unique: list[str] = []
+    seen: set[str] = set()
+    for cand in candidates:
+        if cand and cand not in seen:
+            seen.add(cand)
+            unique.append(cand)
+    return unique
+
+
+def answer_focused_reward_fn(response: str, ground_truth: Any) -> dict[str, float]:
+    """
+    放宽格式限制，优先按答案是否正确给奖励。
+    1) 优先走 question_only_reward_fn(对 boxed 答案友好)
+    2) 再用若干候选答案片段尝试和ground truth匹配，只要有一个候选片段被判定为正确就给满奖励。
+    """
+    boxed_scores = question_only_reward_fn(response, ground_truth)
+    if boxed_scores["reward"] > 0:
+        return boxed_scores
+
+    gt_candidates = _ground_truth_candidates(ground_truth)
+    for candidate in _extract_answer_candidates(response):
+        is_correct = False
+        for gt in gt_candidates:
+            try:
+                is_correct |= bool(grade(candidate, gt, fast=True))
+            except Exception:
+                continue
+        if is_correct:
+            return {"format_reward": 0.0, "answer_reward": 1.0, "reward": 1.0}
+    return {"format_reward": 0.0, "answer_reward": 0.0, "reward": 0.0}
+
+
+def resolve_reward_fn(mode: str) -> Callable[[str, Any], dict[str, float]]:
+    """
+    根据配置的 reward_mode 返回对应的奖励函数。
+    strict要求模型输出完全符合格式要求才有奖励
+    answer_focused放宽格式限制，更加关注答案正确与否。
+    """
+    if mode == "strict":
+        return r1_zero_reward_fn
+    if mode == "answer_focused":
+        return answer_focused_reward_fn
+    raise ValueError(f"Invalid reward mode: {mode}")
+
+
+def resolve_prompt_template(mode: str) -> str:
+    """
+    选择对应的Prompt模板
+    """
+    if mode == "strict":
+        return STRICT_PROMPT_TEMPLATE
+    if mode == "answer_focused":
+        return ANSWER_FOCUSED_PROMPT_TEMPLATE
+    raise ValueError(f"Invalid reward mode: {mode}")
+
+
+def resolve_stop_strings(mode: str) -> list[str]:
+    """
+    选择对应结束词
+    """
+    if mode == "strict":
+        return STRICT_STOP_STRINGS
+    if mode == "answer_focused":
+        return ANSWER_FOCUSED_STOP_STRINGS
+    raise ValueError(f"Invalid reward mode: {mode}")
 
 
 def init_vllm(model_id: str, device: str, seed: int, gpu_memory_utilization: float = 0.85) -> LLM:
@@ -147,6 +301,8 @@ def generate_rollouts(
     llm: LLM,
     questions: list[str],
     ground_truths: list[str],
+    prompt_template: str,
+    stop_strings: list[str],
     group_size: int,
     sampling_temperature: float,
     sampling_min_tokens: int,
@@ -155,14 +311,14 @@ def generate_rollouts(
     """
     使用 vLLM 生成 rollouts。对于输入的每个问题，vLLM 会生成 group_size 个不同的答案。返回值包含重复的 prompts（每个 prompt 重复 group_size 次）、rollout 的回答和对应的 ground truth 答案。
     """
-    prompt_strs = [PROMPT_TEMPLATE.format(question=q) for q in questions]
+    prompt_strs = [prompt_template.format(question=q) for q in questions]
     sampling_params = SamplingParams(
         temperature=sampling_temperature,
         top_p=1.0,
         n=group_size,
         min_tokens=sampling_min_tokens,
         max_tokens=sampling_max_tokens,
-        stop=["</answer>"],
+        stop=stop_strings,
         include_stop_str_in_output=True,
     )
     outputs = llm.generate(prompt_strs, sampling_params)
@@ -181,7 +337,9 @@ def generate_rollouts(
 def evaluate_validation_reward(
     llm: LLM,
     val_examples: list[dict[str, Any]],
-    reward_fn: Callable[[str, str], dict[str, float]],
+    reward_fn: Callable[[str, Any], dict[str, float]],
+    prompt_template: str,
+    stop_strings: list[str],
     val_size: int,
     sampling_temperature: float,
     max_tokens: int,
@@ -195,7 +353,7 @@ def evaluate_validation_reward(
     else:
         eval_examples = val_examples
 
-    prompts = [PROMPT_TEMPLATE.format(question=item["problem"]) for item in eval_examples]
+    prompts = [prompt_template.format(question=item["problem"]) for item in eval_examples]
     ground_truths = [item["answer"] for item in eval_examples]
     sampling_params = SamplingParams(
         temperature=sampling_temperature,
@@ -203,7 +361,7 @@ def evaluate_validation_reward(
         n=1,
         max_tokens=max_tokens,
         min_tokens=4,
-        stop=["</answer>"],
+        stop=stop_strings,
         include_stop_str_in_output=True,
     )
 
@@ -294,7 +452,7 @@ def run_grpo_train_loop(
     llm: LLM,
     train_examples: list[dict[str, Any]],
     val_examples: list[dict[str, Any]],
-    reward_fn: Callable[[str, str], dict[str, float]],
+    reward_fn: Callable[[str, Any], dict[str, float]],
     cfg: GRPOConfig,
 ) -> dict[str, Any]:
     random.seed(cfg.seed)
@@ -319,6 +477,8 @@ def run_grpo_train_loop(
     assert cfg.train_batch_size >= cfg.group_size, "train_batch_size must be >= group_size" #保证一个训练 batch 至少容得下一整组样本，避免“比一组还小”的极端设置。
 
     n_prompts_per_rollout_batch = cfg.rollout_batch_size // cfg.group_size
+    prompt_template = resolve_prompt_template(cfg.reward_mode)
+    stop_strings = resolve_stop_strings(cfg.reward_mode)
 
     #采样总回答数必须能被训练batch size 整除
     assert cfg.rollout_batch_size % cfg.train_batch_size == 0, (
@@ -330,6 +490,7 @@ def run_grpo_train_loop(
         lr=cfg.learning_rate,
         weight_decay=0.0,
         betas=(0.9, 0.95),
+        eps=cfg.optimizer_eps,
     )
 
     micro_train_batch_size = cfg.train_batch_size // cfg.gradient_accumulation_steps
@@ -347,6 +508,8 @@ def run_grpo_train_loop(
         llm=llm,
         val_examples=val_examples,
         reward_fn=reward_fn,
+        prompt_template=prompt_template,
+        stop_strings=stop_strings,
         val_size=cfg.val_size,
         sampling_temperature=cfg.eval_sampling_temperature,
         max_tokens=cfg.sampling_max_tokens,
@@ -364,6 +527,8 @@ def run_grpo_train_loop(
             llm=llm,
             questions=questions,
             ground_truths=ground_truths,
+            prompt_template=prompt_template,
+            stop_strings=stop_strings,
             group_size=cfg.group_size,
             sampling_temperature=cfg.sampling_temperature,
             sampling_min_tokens=cfg.sampling_min_tokens,
@@ -497,6 +662,8 @@ def run_grpo_train_loop(
                 llm=llm,
                 val_examples=val_examples,
                 reward_fn=reward_fn,
+                prompt_template=prompt_template,
+                stop_strings=stop_strings,
                 val_size=cfg.val_size,
                 sampling_temperature=cfg.eval_sampling_temperature,
                 max_tokens=cfg.sampling_max_tokens,
@@ -532,6 +699,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seed", type=int, default=defaults.seed)
     parser.add_argument("--n_grpo_steps", type=int, default=defaults.n_grpo_steps)
     parser.add_argument("--learning_rate", type=float, default=defaults.learning_rate)
+    parser.add_argument("--optimizer_eps", type=float, default=defaults.optimizer_eps)
     parser.add_argument("--advantage_eps", type=float, default=defaults.advantage_eps)
     parser.add_argument("--rollout_batch_size", type=int, default=defaults.rollout_batch_size)
     parser.add_argument("--group_size", type=int, default=defaults.group_size)
@@ -548,8 +716,24 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=defaults.loss_type,
         choices=["no_baseline", "reinforce_with_baseline", "grpo_clip"],
     )
+    parser.add_argument(
+        "--reward_mode",
+        type=str,
+        default=defaults.reward_mode,
+        choices=["strict", "answer_focused"],
+    )
     parser.add_argument("--cliprange", type=float, default=defaults.cliprange)
-    parser.add_argument("--is_std_normalization", action="store_true", default=defaults.is_std_normalization)
+    parser.add_argument(
+        "--is_std_normalization",
+        dest="is_std_normalization",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--no-is_std_normalization",
+        dest="is_std_normalization",
+        action="store_false",
+    )
+    parser.set_defaults(is_std_normalization=defaults.is_std_normalization)
     parser.add_argument("--gpu_memory_utilization", type=float, default=defaults.gpu_memory_utilization)
     parser.add_argument("--val_every_steps", type=int, default=defaults.val_every_steps)
     parser.add_argument("--val_size", type=int, default=defaults.val_size)
@@ -587,6 +771,11 @@ def main() -> None:
         seed=cfg.seed,
         gpu_memory_utilization=cfg.gpu_memory_utilization,
     )
+    reward_fn = resolve_reward_fn(cfg.reward_mode)
+    print(
+        f"[info] reward_mode={cfg.reward_mode} loss_type={cfg.loss_type} "
+        f"is_std_normalization={cfg.is_std_normalization}"
+    )
 
     run_grpo_train_loop(
         policy=policy,
@@ -594,7 +783,7 @@ def main() -> None:
         llm=llm,
         train_examples=train_examples,
         val_examples=val_examples,
-        reward_fn=r1_zero_reward_fn,
+        reward_fn=reward_fn,
         cfg=cfg,
     )
 
