@@ -1,0 +1,7 @@
+{
+  "total_updates": 767,
+  "total_update_steps_target": 767,
+  "best_val_accuracy": 0.46,
+  "last_train_loss": 0.45817783900669645,
+  "elapsed_seconds": 11151.12755660899
+}
