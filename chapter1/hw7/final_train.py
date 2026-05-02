@@ -16,11 +16,18 @@ from cross_entropy import CrossEntropyLoss
 from lr_cosine_shedule import CosineSchedule
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--device", type=str, default="cuda:6")
+parser.add_argument("--device", type=str, default="cuda:7")
 parser.add_argument("--epochs", type=int, default=40)
 parser.add_argument("--train_steps", type=int, default=2000)
-parser.add_argument("--batch_size", type=int, default=64)
+parser.add_argument("--batch_size", type=int, default=4)
 parser.add_argument('--no-rmsnorm', dest='use_rmsnorm', action='store_false', help="Disable RMSNorm and use LayerNorm instead")
+# parser.add_argument("--no_rope", dest='use_rope', action='store_false', help="Disable RoPE and use learned position embeddings instead")
+parser.add_argument("--d_model", type=int, default=768)
+parser.add_argument("--d_ff", type=int, default=3072)
+parser.add_argument("--n_layers", type=int, default=12)
+parser.add_argument("--n_heads", type=int, default=12)
+
+
 parser.set_defaults(use_rmsnorm=True)
 args = parser.parse_args()
 
@@ -28,6 +35,11 @@ device = args.device
 epochs = args.epochs
 train_steps = args.train_steps
 batch_size = args.batch_size
+d_model = args.d_model
+d_ff = args.d_ff
+n_layers = args.n_layers
+n_heads = args.n_heads
+
 
 timestamp = time.strftime("%Y%m%d_%H%M%S")
 wandb.login()
@@ -46,10 +58,10 @@ run = wandb.init(project="cs336_final_train",
                 # Model
                 "vocab_size": 10000,
                 "context_length": 256,
-                "d_model": 512,
-                "d_ff": 1344,
-                "n_layers": 4,
-                "n_heads": 16,
+                "d_model": d_model,
+                "d_ff": d_ff,
+                "n_layers": n_layers,
+                "n_heads": n_heads,
                 "rope_theta": 10000.0,
 
                 # Training
@@ -114,9 +126,9 @@ vocab_size = config["vocab_size"]
 # encode_ids = torch.tensor(encode_ids, dtype=torch.long)
 # print("数据加载完成")
 #直接导入编码后的数据
-with open("encoded_ids_train.pkl", "rb") as f:
+with open("owt_encoded_ids_train.pkl", "rb") as f:
     train_encode_ids = pickle.load(f)
-with open("encoded_ids_valid.pkl", "rb") as f:
+with open("owt_encoded_ids_valid.pkl", "rb") as f:
     valid_encode_ids = pickle.load(f)
 
 train_data_loader = DataLoader(train_encode_ids, config["batch_size"],config["context_length"],shuffle=True) # 训练集导入
