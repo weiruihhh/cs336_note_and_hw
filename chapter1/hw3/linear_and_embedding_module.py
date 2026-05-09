@@ -10,7 +10,7 @@ class LinearModule(nn.Module):
         self.device = device
         self.dtype = dtype
 
-        self.W = nn.Parameter(torch.empty(self.out_features, self.in_features, device=self.device, dtype=self.dtype))
+        self.W = nn.Parameter(torch.empty(self.in_features, self.out_features, device=self.device, dtype=self.dtype))
         # self.b = nn.Parameter(torch.empty(out_features, device=device, dtype=dtype))
 
         # 对权重进行Xavier初始化
@@ -18,7 +18,8 @@ class LinearModule(nn.Module):
         torch.nn.init.trunc_normal_(self.W, std=std, a = -3 * std, b = 3 * std)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return x @ self.W.T
+        # 官方讲义要求存W而不是W的转置，所以用x @ W而不是x @ W.T
+        return x @ self.W
     
 """在讲义中，embedding层在第一步将token_ids映射到d_model维度"""
 class EmbeddingModule(nn.Module):
