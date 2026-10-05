@@ -8,6 +8,7 @@
 
 **⭐ 如果这个项目对你有帮助，请您给我一个 Star⭐**
 
+**正在准备第二版笔记以及github pages 网页版**
 
 [📖 课程官网](https://stanford-cs336.github.io/spring2025/)
 ---
