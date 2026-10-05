@@ -1,0 +1,11 @@
+node_modules/
+.tools/
+content/.vitepress/cache/
+content/.vitepress/dist/
+reports/screenshots/
+reports/backups/
+__pycache__/
+*.pyc
+deliverables/
+README.md
+*.md

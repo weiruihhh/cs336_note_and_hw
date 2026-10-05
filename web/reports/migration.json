@@ -1,0 +1,96 @@
+{
+  "documents": [
+    {
+      "source": "1.tex",
+      "sha256": "22608fd5c6b3dcdc221a2b90df23006f8662e40b831f1e11f0366f554ee0553a",
+      "output": "content\\part-1\\chapter-1.md",
+      "math_count": 23,
+      "restored_math_count": 23,
+      "code_count": 5,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "2.tex",
+      "sha256": "5ad93186e4e1b17f79be22a6459abbf423748e2a9e0624297e7e8b20821cecf5",
+      "output": "content\\part-1\\chapter-2.md",
+      "math_count": 145,
+      "restored_math_count": 145,
+      "code_count": 4,
+      "images": [
+        "images/61b6458b48.png",
+        "images/06d52dfd64.png",
+        "images/2d3f359335.png",
+        "images/8d7f8c5b90.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "3.tex",
+      "sha256": "f7627ba27201c7e1f0fb25bf3fcc8ce5fa3d10484bc011f36328efcb89c41ec0",
+      "output": "content\\part-1\\chapter-3.md",
+      "math_count": 179,
+      "restored_math_count": 179,
+      "code_count": 6,
+      "images": [
+        "images/dac7819b26.png",
+        "images/5690d449af.png",
+        "images/9bc2f96548.png",
+        "images/0c79164a2e.png",
+        "images/b218784267.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "4.tex",
+      "sha256": "ec3e26766daf1f673e141be5eb6edaec668612e3a93d89c47d4d22fe9ec19d5d",
+      "output": "content\\part-1\\chapter-4.md",
+      "math_count": 7,
+      "restored_math_count": 7,
+      "code_count": 8,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "5.tex",
+      "sha256": "f04e2bd02d46f572c9ff44f4b2fea91a664283f0acaa62782c0b55fa9caff030",
+      "output": "content\\part-1\\chapter-5.md",
+      "math_count": 18,
+      "restored_math_count": 18,
+      "code_count": 0,
+      "images": [
+        "images/8d7f8c5b90.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "appendix.tex",
+      "sha256": "beeb7084561b51845e357da28e6a8313db44e32390e940efd1bb6e78091dd0ec",
+      "output": "content\\appendix.md",
+      "math_count": 64,
+      "restored_math_count": 64,
+      "code_count": 1,
+      "images": [
+        "images/77d0408750.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "part-resources.tex",
+      "sha256": "aaead26bc02c811c23eb78aee6cf5084e4a90d6feab2a77923272e6e16635606",
+      "output": "content\\part-1\\resources.md",
+      "math_count": 0,
+      "restored_math_count": 0,
+      "code_count": 0,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    }
+  ]
+}

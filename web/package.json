@@ -1,0 +1,22 @@
+{
+  "name": "cs336-notes-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:tex": "python -X utf8 scripts/migrate.py",
+    "test:content": "python -X utf8 -m unittest discover -s tests -v",
+    "audit:content": "python -X utf8 scripts/audit_content.py",
+    "dev": "vitepress dev content --host 127.0.0.1",
+    "build": "vitepress build content",
+    "preview": "vitepress preview content --host 127.0.0.1 --port 4173"
+  },
+  "devDependencies": {
+    "markdown-it-mathjax3": "^4.3.2",
+    "medium-zoom": "^1.1.0",
+    "vitepress": "1.6.4",
+    "vue": "^3.5.13"
+  },
+  "dependencies": {
+    "rollup": "^4.62.2"
+  }
+}
