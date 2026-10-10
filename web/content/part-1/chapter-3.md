@@ -390,14 +390,7 @@ AdaGrad 的一个重大缺点是 $G_t$ 是<strong class="key-term">无上限累�
 
 - $g_t^2$:表示梯度按元素平方的值
 
-$\begin{aligned}
-E\left[g^{2}\right]_{1} & =(1-\gamma) g_{1}^{2} \\
-E\left[g^{2}\right]_{2} & =\gamma E\left[g^{2}\right]_{1}+(1-\gamma) g_{2}^{2}=\gamma(1-\gamma) g_{1}^{2}+(1-\gamma) g_{2}^{2} \\
-E\left[g^{2}\right]_{3} & =\gamma E\left[g^{2}\right]_{2}+(1-\gamma) g_{3}^{2} \\
-& =\gamma^{2}(1-\gamma) g_{1}^{2}+\gamma(1-\gamma) g_{2}^{2}+(1-\gamma) g_{3}^{2} \\
-\ldots & \\
-E\left[g^{2}\right]_{t} &= (1-\gamma)\sum_{i=1}^{t}\gamma^{t-i} g_{i}^{2}
-\end{aligned}$
+$\begin{aligned} E\left[g^{2}\right]_{1} & =(1-\gamma) g_{1}^{2} \\ E\left[g^{2}\right]_{2} & =\gamma E\left[g^{2}\right]_{1}+(1-\gamma) g_{2}^{2}=\gamma(1-\gamma) g_{1}^{2}+(1-\gamma) g_{2}^{2} \\ E\left[g^{2}\right]_{3} & =\gamma E\left[g^{2}\right]_{2}+(1-\gamma) g_{3}^{2} \\ & =\gamma^{2}(1-\gamma) g_{1}^{2}+\gamma(1-\gamma) g_{2}^{2}+(1-\gamma) g_{3}^{2} \\ \ldots & \\ E\left[g^{2}\right]_{t} &= (1-\gamma)\sum_{i=1}^{t}\gamma^{t-i} g_{i}^{2} \end{aligned}$
 
 最近的梯度平方权重大,<strong class="key-term">越早之前的梯度影响越小</strong>(指数级衰减).
 
@@ -720,82 +713,362 @@ monitor=’val_loss’, mode=’min’, patience=3’, factor=0.5, lr=0.01
 <caption>ReduceLROnPlateau 工作流程示例</caption>
 <thead>
 <tr>
-<th style="text-align: center;"><strong>Epoch</strong></th>
-<th style="text-align: center;"><strong>val_loss</strong></th>
-<th style="text-align: center;"><strong>说明</strong></th>
-<th style="text-align: center;"><strong>Patience计数</strong></th>
-<th style="text-align: center;"><strong>学习率(LR)</strong></th>
-<th style="text-align: center;"></th>
+<th style="text-align: center;">
+
+<strong>Epoch</strong>
+
+</th>
+
+<th style="text-align: center;">
+
+<strong>val_loss</strong>
+
+</th>
+
+<th style="text-align: center;">
+
+<strong>说明</strong>
+
+</th>
+
+<th style="text-align: center;">
+
+<strong>Patience计数</strong>
+
+</th>
+
+<th style="text-align: center;">
+
+<strong>学习率(LR)</strong>
+
+</th>
+
+<th style="text-align: center;">
+
+
+
+</th>
+
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1.0</td>
-<td style="text-align: center;">初始最佳值</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0.01</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">
+
+1
+
+</td>
+
+<td style="text-align: center;">
+
+1.0
+
+</td>
+
+<td style="text-align: center;">
+
+初始最佳值
+
+</td>
+
+<td style="text-align: center;">
+
+0
+
+</td>
+
+<td style="text-align: center;">
+
+0.01
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">0.9</td>
-<td style="text-align: center;">改善,更新最佳值为0.9</td>
-<td style="text-align: center;">重置为0</td>
-<td style="text-align: center;">0.01</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">
+
+2
+
+</td>
+
+<td style="text-align: center;">
+
+0.9
+
+</td>
+
+<td style="text-align: center;">
+
+改善,更新最佳值为0.9
+
+</td>
+
+<td style="text-align: center;">
+
+重置为0
+
+</td>
+
+<td style="text-align: center;">
+
+0.01
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">0.8</td>
-<td style="text-align: center;">改善,更新最佳值为0.8</td>
-<td style="text-align: center;">重置为0</td>
-<td style="text-align: center;">0.01</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">
+
+3
+
+</td>
+
+<td style="text-align: center;">
+
+0.8
+
+</td>
+
+<td style="text-align: center;">
+
+改善,更新最佳值为0.8
+
+</td>
+
+<td style="text-align: center;">
+
+重置为0
+
+</td>
+
+<td style="text-align: center;">
+
+0.01
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">0.82</td>
-<td style="text-align: center;">未改善</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">0.01</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">
+
+4
+
+</td>
+
+<td style="text-align: center;">
+
+0.82
+
+</td>
+
+<td style="text-align: center;">
+
+未改善
+
+</td>
+
+<td style="text-align: center;">
+
+1
+
+</td>
+
+<td style="text-align: center;">
+
+0.01
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 <tr>
-<td style="text-align: center;">5</td>
-<td style="text-align: center;">0.81</td>
-<td style="text-align: center;">未改善</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">0.01</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">
+
+5
+
+</td>
+
+<td style="text-align: center;">
+
+0.81
+
+</td>
+
+<td style="text-align: center;">
+
+未改善
+
+</td>
+
+<td style="text-align: center;">
+
+2
+
+</td>
+
+<td style="text-align: center;">
+
+0.01
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 <tr>
-<td style="text-align: center;">6</td>
-<td style="text-align: center;">0.83</td>
-<td style="text-align: center;">未改善</td>
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">0.01</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">
+
+6
+
+</td>
+
+<td style="text-align: center;">
+
+0.83
+
+</td>
+
+<td style="text-align: center;">
+
+未改善
+
+</td>
+
+<td style="text-align: center;">
+
+3
+
+</td>
+
+<td style="text-align: center;">
+
+0.01
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 <tr>
-<td colspan="5" style="text-align: left;"><strong class="critical-term">触发条件:Patience达到3,LR需要降低</strong></td>
-<td style="text-align: center;"></td>
+<td colspan="5" style="text-align: left;">
+
+<strong class="critical-term">触发条件:Patience达到3,LR需要降低</strong>
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 <tr>
-<td style="text-align: center;">7</td>
-<td style="text-align: center;">0.75</td>
-<td style="text-align: center;">改善,更新最佳值为0.75</td>
-<td style="text-align: center;">重置为0</td>
-<td style="text-align: center;">0.005</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">
+
+7
+
+</td>
+
+<td style="text-align: center;">
+
+0.75
+
+</td>
+
+<td style="text-align: center;">
+
+改善,更新最佳值为0.75
+
+</td>
+
+<td style="text-align: center;">
+
+重置为0
+
+</td>
+
+<td style="text-align: center;">
+
+0.005
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 <tr>
-<td style="text-align: center;">8</td>
-<td style="text-align: center;">0.76</td>
-<td style="text-align: center;">未改善</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">0.005</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">
+
+8
+
+</td>
+
+<td style="text-align: center;">
+
+0.76
+
+</td>
+
+<td style="text-align: center;">
+
+未改善
+
+</td>
+
+<td style="text-align: center;">
+
+1
+
+</td>
+
+<td style="text-align: center;">
+
+0.005
+
+</td>
+
+<td style="text-align: center;">
+
+
+
+</td>
+
 </tr>
 </tbody>
 </table>

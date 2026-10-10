@@ -7,7 +7,7 @@
     "test:content": "python -X utf8 -m unittest discover -s tests -v",
     "audit:content": "python -X utf8 scripts/audit_content.py",
     "dev": "vitepress dev content --host 127.0.0.1",
-    "build": "vitepress build content",
+    "build": "node scripts/check-pages.mjs && vitepress build content",
     "preview": "vitepress preview content --host 127.0.0.1 --port 4173"
   },
   "devDependencies": {

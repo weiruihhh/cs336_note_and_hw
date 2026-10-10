@@ -39,7 +39,7 @@ $v = \mathrm{TransformerLM}(x_{1\ldots t})_t \in \mathbb{R}^{\text{vocab\_size}}
 <figcaption>Transformer架构流程图</figcaption>
 </figure>
 
-因此总结下来，整个解码过程就是输入一段文本(或者说提示词Prompt),模型就会根据提示词生成下一个词的概率分布，模型进行采样得到下一个词，自回归特性将重复这个过程，直到生成序列结束标记 \<endoftext\>（或达到我们指定的最大生成数）。
+因此总结下来，整个解码过程就是输入一段文本(或者说提示词Prompt),模型就会根据提示词生成下一个词的概率分布，模型进行采样得到下一个词，自回归特性将重复这个过程，直到生成序列结束标记 &lt;endoftext&gt;（或达到我们指定的最大生成数）。
 
 ## 5.2 温度缩放（Temperature Scaling）
 
@@ -71,7 +71,7 @@ $$
 
 <div class="custom-block info">
 
-<p class="custom-block-title">延伸阅读 · </p>
+<p class="custom-block-title">延伸阅读</p>
 
 <strong class="note-label">注意：</strong>温度缩放是 <strong class="key-term">离线</strong> 操作，在生成时一次性应用，不会影响模型训练。
 

@@ -486,19 +486,7 @@ Rope 旋转位置编码就是属于相对位置编码，是一种经常被用在
 
 在二维空间中，旋转可以用一个单一的角 $\theta$ 定义。作为约定，<strong class="key-term"> 正角表示逆时针旋转</strong>。把笛卡尔坐标的列向量关于原点逆时针旋转 $\theta$ 的矩阵是:
 
-$M(\theta)=\left[\begin{array}{cc}
-\cos \theta & -\sin \theta \\
-\sin \theta & \cos \theta
-\end{array}\right]=\cos \theta\left[\begin{array}{ll}
-1 & 0 \\
-0 & 1
-\end{array}\right]+\sin \theta\left[\begin{array}{cc}
-0 & -1 \\
-1 & 0
-\end{array}\right]=\exp \left(\theta\left[\begin{array}{cc}
-0 & -1 \\
-1 & 0
-\end{array}\right]\right)$
+$M(\theta)=\left[\begin{array}{cc} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{array}\right]=\cos \theta\left[\begin{array}{ll} 1 & 0 \\ 0 & 1 \end{array}\right]+\sin \theta\left[\begin{array}{cc} 0 & -1 \\ 1 & 0 \end{array}\right]=\exp \left(\theta\left[\begin{array}{cc} 0 & -1 \\ 1 & 0 \end{array}\right]\right)$
 
 <strong class="critical-term"> 欧拉公式：</strong> $e^{i\theta} = cos\theta + i sin\theta$
 
@@ -516,11 +504,7 @@ $M(\theta)=\left[\begin{array}{cc}
 
 在二维场景下，定义为
 
-<span class="key-formula">$\begin{array}{l}
-f_{q}\left(\boldsymbol{x}_{m}, m\right)=\left(\boldsymbol{W}_{q} \boldsymbol{x}_{m}\right) e^{i m \theta} =q_me^{i m \theta}\\
-f_{k}\left(\boldsymbol{x}_{n}, n\right)=\left(\boldsymbol{W}_{k} \boldsymbol{x}_{n}\right) e^{i n \theta}=k_ne^{i n \theta} \\
-g\left(\boldsymbol{x}_{m}, \boldsymbol{x}_{n}, m-n\right)=\operatorname{Re}\left[\left(\boldsymbol{W}_{q} \boldsymbol{x}_{m}\right)\left(\boldsymbol{W}_{k} \boldsymbol{x}_{n}\right)^{*} e^{i(m-n) \theta}\right]
-\end{array}$</span>
+<span class="key-formula">$\begin{array}{l} f_{q}\left(\boldsymbol{x}_{m}, m\right)=\left(\boldsymbol{W}_{q} \boldsymbol{x}_{m}\right) e^{i m \theta} =q_me^{i m \theta}\\ f_{k}\left(\boldsymbol{x}_{n}, n\right)=\left(\boldsymbol{W}_{k} \boldsymbol{x}_{n}\right) e^{i n \theta}=k_ne^{i n \theta} \\ g\left(\boldsymbol{x}_{m}, \boldsymbol{x}_{n}, m-n\right)=\operatorname{Re}\left[\left(\boldsymbol{W}_{q} \boldsymbol{x}_{m}\right)\left(\boldsymbol{W}_{k} \boldsymbol{x}_{n}\right)^{*} e^{i(m-n) \theta}\right] \end{array}$</span>
 
 其实和无位置编码的 Transformer 架构比起来的区别只是增加了 $e^{im\theta}$ 项
 
@@ -564,39 +548,7 @@ $$
 
 对于此，因为有很多零参与计算会很浪费，优化的方法是：
 
-$\left(\begin{array}{c}
-q_{0} \\
-q_{1} \\
-q_{2} \\
-q_{3} \\
-\vdots \\
-q_{d-2} \\
-q_{d-1}
-\end{array}\right) \otimes\left(\begin{array}{c}
-\cos m \theta_{0} \\
-\cos m \theta_{0} \\
-\cos m \theta_{1} \\
-\cos m \theta_{1} \\
-\vdots \\
-\cos m \theta_{d / 2-1} \\
-\cos m \theta_{d / 2-1}
-\end{array}\right)+\left(\begin{array}{c}
--q_{1} \\
-q_{0} \\
--q_{3} \\
-q_{2} \\
-\vdots \\
--q_{d-1} \\
-q_{d-2}
-\end{array}\right) \otimes\left(\begin{array}{c}
-\sin m \theta_{0} \\
-\sin m \theta_{0} \\
-\sin m \theta_{1} \\
-\sin m \theta_{1} \\
-\vdots \\
-\sin m \theta_{d / 2-1} \\
-\sin m \theta_{d / 2-1}
-\end{array}\right)$
+$\left(\begin{array}{c} q_{0} \\ q_{1} \\ q_{2} \\ q_{3} \\ \vdots \\ q_{d-2} \\ q_{d-1} \end{array}\right) \otimes\left(\begin{array}{c} \cos m \theta_{0} \\ \cos m \theta_{0} \\ \cos m \theta_{1} \\ \cos m \theta_{1} \\ \vdots \\ \cos m \theta_{d / 2-1} \\ \cos m \theta_{d / 2-1} \end{array}\right)+\left(\begin{array}{c} -q_{1} \\ q_{0} \\ -q_{3} \\ q_{2} \\ \vdots \\ -q_{d-1} \\ q_{d-2} \end{array}\right) \otimes\left(\begin{array}{c} \sin m \theta_{0} \\ \sin m \theta_{0} \\ \sin m \theta_{1} \\ \sin m \theta_{1} \\ \vdots \\ \sin m \theta_{d / 2-1} \\ \sin m \theta_{d / 2-1} \end{array}\right)$
 
 即对对应的元素相乘相加，这样做在代码里面可以用 arrange 函数处理了。
 
@@ -707,13 +659,7 @@ $$
 
 e.g. $Q^TK$相乘后的形状为 $R^{n \times m},$ 那么mask矩阵的形状也应该是 $R^{n \times m}$
 
-$\begin{pmatrix}a_{11} & a_{12} & a_{13} \\a_{21} & a_{22} & a_{23} \\a_{31} & a_{32} & a_{33}\end{pmatrix} 
-    \otimes
-    \begin{pmatrix}
-    True & True & False \\
-    True & False & True \\
-    True & False & True
-    \end{pmatrix}=\begin{pmatrix}a_{11} & a_{12} & -\infty \\a_{21} & -\infty & a_{23} \\a_{31} & -\infty & a_{33}\end{pmatrix}$
+$\begin{pmatrix}a_{11} & a_{12} & a_{13} \\a_{21} & a_{22} & a_{23} \\a_{31} & a_{32} & a_{33}\end{pmatrix} \otimes \begin{pmatrix} True & True & False \\ True & False & True \\ True & False & True \end{pmatrix}=\begin{pmatrix}a_{11} & a_{12} & -\infty \\a_{21} & -\infty & a_{23} \\a_{31} & -\infty & a_{33}\end{pmatrix}$
 
 </div>
 

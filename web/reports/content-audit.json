@@ -21,6 +21,50 @@
       "missing_chinese_passages": {}
     },
     {
+      "chapter": 6,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 7,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 8,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 9,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 10,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 11,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 12,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 13,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 14,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 15,
+      "missing_chinese_passages": {}
+    },
+    {
+      "chapter": 16,
+      "missing_chinese_passages": {}
+    },
+    {
       "chapter": "appendix",
       "missing_chinese_passages": {}
     }
@@ -52,16 +96,91 @@
       "rendered": 18
     },
     {
-      "page": "appendix.html",
+      "page": "part-2/chapter-6.html",
+      "expected": 0,
+      "rendered": 0
+    },
+    {
+      "page": "part-2/chapter-7.html",
+      "expected": 264,
+      "rendered": 264
+    },
+    {
+      "page": "part-2/chapter-8.html",
+      "expected": 2,
+      "rendered": 2
+    },
+    {
+      "page": "part-3/chapter-9.html",
+      "expected": 17,
+      "rendered": 17
+    },
+    {
+      "page": "part-4/chapter-10.html",
       "expected": 64,
       "rendered": 64
+    },
+    {
+      "page": "part-5/chapter-11.html",
+      "expected": 11,
+      "rendered": 11
+    },
+    {
+      "page": "part-5/chapter-12.html",
+      "expected": 214,
+      "rendered": 214
+    },
+    {
+      "page": "part-5/chapter-13.html",
+      "expected": 185,
+      "rendered": 185
+    },
+    {
+      "page": "part-6/chapter-14.html",
+      "expected": 144,
+      "rendered": 144
+    },
+    {
+      "page": "part-6/chapter-15.html",
+      "expected": 7,
+      "rendered": 7
+    },
+    {
+      "page": "appendix.html",
+      "expected": 564,
+      "rendered": 564
     },
     {
       "page": "part-1/resources.html",
       "expected": 0,
       "rendered": 0
+    },
+    {
+      "page": "part-2/resources.html",
+      "expected": 0,
+      "rendered": 0
+    },
+    {
+      "page": "part-3/resources.html",
+      "expected": 3,
+      "rendered": 3
+    },
+    {
+      "page": "part-4/resources.html",
+      "expected": 0,
+      "rendered": 0
+    },
+    {
+      "page": "part-5/resources.html",
+      "expected": 0,
+      "rendered": 0
+    },
+    {
+      "page": "part-6/resources.html",
+      "expected": 0,
+      "rendered": 0
     }
   ],
-  "html_pages": 10,
+  "html_pages": 30,
   "site_issues": []
 }

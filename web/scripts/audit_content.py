@@ -31,11 +31,25 @@ class Page(HTMLParser):
 
 def audit():
     prose = []
-    for n in [1, 2, 3, 4, 5, 'appendix']:
+    for n in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 'appendix']:
         source = (SOURCE/f'{n}.tex').read_text(encoding='utf-8')
         source = re.sub(r'(?<!\\)%[^\n]*', '', source)
         source = re.sub(r'\\includegraphics(?:\[[^]]*\])?\{[^}]*\}', '', source)
-        page = ROOT/'content/appendix.md' if n == 'appendix' else ROOT/f'content/part-1/chapter-{n}.md'
+        # Paper page numbers are replaced with a resource link on the website.
+        source = re.sub(r'第\\pageref\{resources:part:([123456])\}页', '{本篇资源入口}', source)
+        source = re.sub(r'第\\ref\{supp:[^}]+\}节', '{对应补充节}', source)
+        source = re.sub(r'第\\ref\{part6:[^}]+\}节', '{对应理论节}', source)
+        page = ROOT/'content/appendix.md'   if n == 'appendix' else ROOT/f'content/part-1/chapter-{n}.md'
+        if isinstance(n, int) and n >= 6:
+            page = ROOT/('content/part-2/resources.md' if n == 6 else f'content/part-2/chapter-{n-1}.md')
+        if n == 10:
+            page = ROOT/'content/part-3/chapter-9.md'
+        if n == 11:
+            page = ROOT/'content/part-4/chapter-10.md'
+        if isinstance(n, int) and 12 <= n <= 14:
+            page = ROOT/f'content/part-5/chapter-{n-1}.md'
+        if isinstance(n, int) and 15 <= n <= 16:
+            page = ROOT/f'content/part-6/chapter-{n-1}.md'
         markdown = page.read_text(encoding='utf-8')
         expected = Counter(re.findall(r'[\u4e00-\u9fff]{4,}', source))
         # Removing a TeX wrapper can join adjacent Chinese phrases in Markdown.

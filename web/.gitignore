@@ -7,5 +7,6 @@ reports/backups/
 __pycache__/
 *.pyc
 deliverables/
+!content/**/*.md
+!content/*.md
 README.md
-*.md

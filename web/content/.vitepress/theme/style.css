@@ -37,6 +37,7 @@
 .vp-doc th { background: var(--vp-c-bg-alt); }
 .vp-doc tr:nth-child(2n) { background: var(--vp-c-bg-soft); }
 .vp-doc td, .vp-doc th { padding: 11px 15px; line-height: 1.7; }
+.vp-doc td > p, .vp-doc th > p { margin: 0; }
 .vp-doc div[class*='language-'] { border: 1px solid var(--vp-c-divider); border-radius: 10px; }
 .vp-doc mjx-container[display='true'] { overflow-x: auto; overflow-y: hidden; padding: 12px 4px; }
 .vp-doc mjx-container:not([display='true']) { display: inline-block; max-width: 100%; overflow-x: auto; overflow-y: hidden; vertical-align: middle; padding: 3px 0; }
@@ -82,6 +83,11 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--vp-c-brand-1); 
 .section-heading h2, .practice-section h2 { font-family: var(--book-serif); font-size: 29px; line-height: 1.5; margin-top: 8px; }
 .section-heading > p { font-size: 12px; line-height: 1.7; color: var(--vp-c-text-2); }
 .chapter-pathway { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.systems-pathway { grid-template-columns: repeat(3, 1fr); }
+.two-chapter-pathway { grid-template-columns: repeat(2, 1fr); }
+.pathway-section + .pathway-section { margin-top: 48px; }
+.systems-links { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 24px; font-size: 14px; color: var(--vp-c-brand-1); }
+.systems-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .chapter-card { display: block; border: 1px solid var(--vp-c-divider); border-radius: 8px; padding: 20px 17px 23px; background: var(--vp-c-bg-elv); transition: transform .2s, border-color .2s; }
 .chapter-card:hover { transform: translateY(-4px); border-color: var(--vp-c-brand-1); }
 .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 34px; }
@@ -101,6 +107,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--vp-c-brand-1); 
   .book-hero { gap: 28px; }
   .hero-diagram { padding: 28px 18px 20px; }
   .chapter-pathway { grid-template-columns: repeat(3, 1fr); }
+  .two-chapter-pathway { grid-template-columns: repeat(2, 1fr); }
   .section-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
   .practice-section { gap: 32px; }
 }

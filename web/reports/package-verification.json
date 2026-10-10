@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-10",
+  "scope": "前六篇（15 章）与最新五部分附录的完整网页版源码",
+  "markdown_pages": 29,
+  "built_html_pages": 30,
+  "regression_tests_passed": 21,
+  "build": "passed",
+  "package_source_matches_built_source": true,
+  "site_link_and_image_issues": [],
+  "missing_chinese_passages": [],
+  "appendix": {
+    "source": "appendix.tex",
+    "source_sha256": "a2bb3d7646a12a78d64f36555aa6fade843c93d0dae58df8a41e093198389af5",
+    "math_count": 564,
+    "rendered_math_count": 564,
+    "images": 7,
+    "sections": [
+      "数学基础",
+      "深度学习基础",
+      "AI Infra 基础",
+      "信息论基础",
+      "正则表达式与文本匹配"
+    ]
+  },
+  "notes": [
+    "原始 TeX 未修改。",
+    "保留旧版 app-repro 引用入口；正文导航提供相关训练与测量章节链接。",
+    "本次未运行模型实验、未推送 GitHub、未重新进行视觉或交互检查。",
+    "构建提示部分 JavaScript 分包大于 500 kB，构建成功。"
+  ]
+}

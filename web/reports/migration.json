@@ -69,13 +69,189 @@
       "unresolved_tokens": []
     },
     {
-      "source": "appendix.tex",
-      "sha256": "beeb7084561b51845e357da28e6a8313db44e32390e940efd1bb6e78091dd0ec",
-      "output": "content\\appendix.md",
+      "source": "7.tex",
+      "sha256": "a70fb90b5c89238e0b609a2034906e7be58915e980a1d00119dc6fadde13ae17",
+      "output": "content\\part-2\\chapter-6.md",
+      "math_count": 0,
+      "restored_math_count": 0,
+      "code_count": 10,
+      "images": [
+        "images/01cf358dcd.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "8.tex",
+      "sha256": "e99d8c83e3ff0977baaa85b616bb04ac8a82ae92ed8703f07fff66a98089da89",
+      "output": "content\\part-2\\chapter-7.md",
+      "math_count": 264,
+      "restored_math_count": 264,
+      "code_count": 4,
+      "images": [
+        "images/59485bf200.png",
+        "images/4a125b5d94.png",
+        "images/7d5bb35acc.png",
+        "images/df802fe248.png",
+        "images/7d5bb35acc.png",
+        "images/75f994157f.png",
+        "images/747a63cb4a.png",
+        "images/9f7b94f13a.png",
+        "images/fd1cc8920b.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "9.tex",
+      "sha256": "12330a65da39d52c8fd1a9df567ff480acc1f97f6d68a65e1bab116e247c6b06",
+      "output": "content\\part-2\\chapter-8.md",
+      "math_count": 2,
+      "restored_math_count": 2,
+      "code_count": 1,
+      "images": [
+        "images/848b15ceec.png",
+        "images/55ec353498.png",
+        "images/bdff2f9112.png",
+        "images/5da5c6217a.png",
+        "images/5da5c6217a.png",
+        "images/cb5b997061.png",
+        "images/1138ec4d41.png",
+        "images/a91b52277b.png",
+        "images/4abbfcffd9.png",
+        "images/db8c9b3c48.png",
+        "images/dfee5738f1.png",
+        "images/e01aa6348b.png",
+        "images/13b8dd3352.png",
+        "images/f7c28d19ea.png",
+        "images/a05977b54a.png",
+        "images/a07dc8c671.png",
+        "images/cbd6c931fb.png",
+        "images/5d20ffd63c.png",
+        "images/7ed0f53a9f.png",
+        "images/c62bde6fed.png",
+        "images/1f5deaf043.png",
+        "images/6f94037b26.png",
+        "images/112378145e.png",
+        "images/77ad80ca96.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "10.tex",
+      "sha256": "75179d3164679e68d5feb331ff290176e5261c50b5823d03dbd6a422ec26b8b2",
+      "output": "content\\part-3\\chapter-9.md",
+      "math_count": 17,
+      "restored_math_count": 17,
+      "code_count": 0,
+      "images": [
+        "images/53c4b72578.png",
+        "images/c6de525702.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "11.tex",
+      "sha256": "0bb522e78ce90b47b533c516a70642edfd7c0f3a21cfd7ab0b7def2fbec0d0d6",
+      "output": "content\\part-4\\chapter-10.md",
       "math_count": 64,
       "restored_math_count": 64,
       "code_count": 1,
       "images": [
+        "images/b43c0ee853.png",
+        "images/707ec4c1f0.png",
+        "images/a747fa26a9.png",
+        "images/2b18fab314.png",
+        "images/bc716baf6d.png",
+        "images/04a7c7942e.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "12.tex",
+      "sha256": "fbee86f47a0d3c372936c14db204ce383058e7731356de81eda7cdf67190c33e",
+      "output": "content\\part-5\\chapter-11.md",
+      "math_count": 11,
+      "restored_math_count": 11,
+      "code_count": 1,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "13.tex",
+      "sha256": "89d2ee63fa011a9b24ae313191b0ca48884165c16d24b605925f7d26fa96710d",
+      "output": "content\\part-5\\chapter-12.md",
+      "math_count": 214,
+      "restored_math_count": 214,
+      "code_count": 0,
+      "images": [
+        "images/e9fcf89ff9.png",
+        "images/086dbedfe7.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "14.tex",
+      "sha256": "2413e844666fd7356782bb293a977c727a1ffdd33ae7b5c028ecd5450a502b08",
+      "output": "content\\part-5\\chapter-13.md",
+      "math_count": 185,
+      "restored_math_count": 185,
+      "code_count": 0,
+      "images": [
+        "images/bc8c5158a5.png",
+        "images/d06ffd4dbd.png",
+        "images/ed38649471.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "15.tex",
+      "sha256": "7251d8497c20948466575d1ca8b85d3effa22654c3c186fc647581674d651fbd",
+      "output": "content\\part-6\\chapter-14.md",
+      "math_count": 144,
+      "restored_math_count": 144,
+      "code_count": 1,
+      "images": [
+        "images/5f5e903d7d.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "16.tex",
+      "sha256": "f90f1512fb9563f4f812a4cec517aab9040dadecf94a0c6418ae32d3c02e5d5a",
+      "output": "content\\part-6\\chapter-15.md",
+      "math_count": 7,
+      "restored_math_count": 7,
+      "code_count": 4,
+      "images": [
+        "images/232b7b1e2a.png",
+        "images/0cd188f72a.png",
+        "images/111b73bf04.png"
+      ],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "appendix.tex",
+      "sha256": "a2bb3d7646a12a78d64f36555aa6fade843c93d0dae58df8a41e093198389af5",
+      "output": "content\\appendix.md",
+      "math_count": 564,
+      "restored_math_count": 564,
+      "code_count": 1,
+      "images": [
+        "images/4f69d05823.png",
+        "images/0a32cf5094.png",
+        "images/1f2b5df054.png",
+        "images/831b332d96.png",
+        "images/7e8a8aa43d.png",
+        "images/8348769932.png",
         "images/77d0408750.png"
       ],
       "unresolved_raw_tex": [],
@@ -85,6 +261,61 @@
       "source": "part-resources.tex",
       "sha256": "aaead26bc02c811c23eb78aee6cf5084e4a90d6feab2a77923272e6e16635606",
       "output": "content\\part-1\\resources.md",
+      "math_count": 0,
+      "restored_math_count": 0,
+      "code_count": 0,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "part-resources.tex",
+      "sha256": "f4180d1fcb9e61dbc3b3cc4a6425dd4f2ff3ac7d43fb01d4a4e980c1e3a0fdd0",
+      "output": "content\\part-2\\resources.md",
+      "math_count": 0,
+      "restored_math_count": 0,
+      "code_count": 0,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "part-resources.tex",
+      "sha256": "a1d9b510b3b65be10276ae8af846bd6309964c458b76fab4dafd4866a4dea61e",
+      "output": "content\\part-3\\resources.md",
+      "math_count": 3,
+      "restored_math_count": 3,
+      "code_count": 0,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "part-resources.tex",
+      "sha256": "9752e42014d913aebe3e3fe29910996c5910fc0e2d4b5f0ad5cdf754879b5315",
+      "output": "content\\part-4\\resources.md",
+      "math_count": 0,
+      "restored_math_count": 0,
+      "code_count": 0,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "part-resources.tex",
+      "sha256": "9763cba308e38db078b51cdb5bb6ea4ad59430ec13dd1df92554d68e2930f2d3",
+      "output": "content\\part-5\\resources.md",
+      "math_count": 0,
+      "restored_math_count": 0,
+      "code_count": 0,
+      "images": [],
+      "unresolved_raw_tex": [],
+      "unresolved_tokens": []
+    },
+    {
+      "source": "part-resources.tex",
+      "sha256": "952a94cd5e94b1dd7e2be02801c7b9b3858df67c4062cef7865a78b948df52a9",
+      "output": "content\\part-6\\resources.md",
       "math_count": 0,
       "restored_math_count": 0,
       "code_count": 0,
